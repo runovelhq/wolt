@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 
-readonly WOLT_RELEASE_VERSION="${WOLT_VERSION:-1.1.2}"
-readonly WOLT_IMAGE_REPOSITORY="${WOLT_IMAGE_REPOSITORY:-alirezasayyari/wolt}"
+readonly WOLT_RELEASE_VERSION="${WOLT_VERSION:-1.1.3}"
+readonly WOLT_IMAGE_REPOSITORY="${WOLT_IMAGE_REPOSITORY:-runovel/wolt}"
 readonly WOLT_INSTALL_DIR_DEFAULT="${WOLT_INSTALL_DIR:-/data/WOLT}"
 readonly COSIGN_VERSION="v3.1.2"
 readonly COSIGN_AMD64_SHA256="f7622ed3cf22e55e1ae6377c080979ff77a22da9981c11df222a2e444991e7cf"
 readonly COSIGN_ARM64_SHA256="90e7ae0b5dfd60f20816b52c012addf7fc055ebcc7bea4ce81c428ca8518c302"
-readonly SIGNING_IDENTITY='^https://github.com/AlirezaSayyari/WOLT/.github/workflows/release.yml@refs/tags/v[0-9]+\.[0-9]+\.[0-9]+.*$'
+readonly SIGNING_IDENTITY='^https://github.com/runovelhq/wolt/.github/workflows/release.yml@refs/tags/v[0-9]+\.[0-9]+\.[0-9]+.*$'
 readonly SIGNING_ISSUER='https://token.actions.githubusercontent.com'
 
 INSTALL_DIR="$WOLT_INSTALL_DIR_DEFAULT"

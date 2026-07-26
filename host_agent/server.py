@@ -43,7 +43,7 @@ class AgentConfig:
     compose_file: Path = Path("/data/WOLT/compose.web.yml")
     host_agent_compose_file: Path = Path("/data/WOLT/compose.host-agent.yml")
     env_file: Path = Path("/data/WOLT/.env.web")
-    image_repository: str = "alirezasayyari/wolt"
+    image_repository: str = "runovel/wolt"
     health_url: str = "http://127.0.0.1:8080/api/v1/health/ready"
     docker_binary: str = "/usr/bin/docker"
     ufw_binary: str = "/usr/sbin/ufw"
@@ -52,7 +52,7 @@ class AgentConfig:
     agent_install_dir: Path = Path("/opt/wolt-host-agent/host_agent")
     systemd_run_binary: str = "/usr/bin/systemd-run"
     systemctl_binary: str = "/usr/bin/systemctl"
-    signing_identity: str = r"^https://github.com/AlirezaSayyari/WOLT/.github/workflows/release.yml@refs/tags/v[0-9]+\.[0-9]+\.[0-9]+.*$"
+    signing_identity: str = r"^https://github.com/runovelhq/wolt/.github/workflows/release.yml@refs/tags/v[0-9]+\.[0-9]+\.[0-9]+.*$"
     signing_issuer: str = "https://token.actions.githubusercontent.com"
 
     @classmethod
@@ -69,7 +69,7 @@ class AgentConfig:
                 candidate.relative_to(project)
             except ValueError as exc:
                 raise AgentError("host_agent_path_outside_project") from exc
-        repository = os.environ.get("WOLT_IMAGE_REPOSITORY", "alirezasayyari/wolt").strip().lower()
+        repository = os.environ.get("WOLT_IMAGE_REPOSITORY", "runovel/wolt").strip().lower()
         if not REPOSITORY_PATTERN.fullmatch(repository):
             raise AgentError("invalid_image_repository")
         runtime_dir = Path(os.environ.get("WOLT_RUNTIME_DIR", str(project / "runtime"))).resolve()
@@ -190,7 +190,7 @@ class HostController:
             except AgentError:
                 ufw_status_error = True
         return {
-            "agent_version": "1.1.2", "ufw_available": ufw_available,
+            "agent_version": "1.1.3", "ufw_available": ufw_available,
             "ufw_active": ufw_active, "ufw_status_error": ufw_status_error,
             "docker_available": docker_available,
             "cosign_available": cosign_available,
