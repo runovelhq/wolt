@@ -24,7 +24,7 @@ clone the repository. Docker Engine, Docker Compose v2, curl, OpenSSL, Python 3,
 `sha256sum` must already be installed; the installer adds a checksum-verified Cosign binary
 when needed.
 
-> Current stable image: `runovel/wolt:v1.1.3` (also published as `1.1.3`, `1.1`, and `latest`)
+> Current stable image: `runovel/wolt:v1.1.3` (also published as `1.1.3`, `1.1`, `1`, and `latest`)
 
 ---
 
@@ -71,12 +71,13 @@ must remain between `1024` and `65535`, and a deployment range may contain at mo
 ports. The active allocation range can then be narrowed from the Settings page without
 recreating the container.
 
-### One-time migration from v1.0.x–v1.1.1
+### One-time migration from v1.0.x–v1.1.2
 
 An existing source-based installation can move to the minimal runtime without losing its
 environment, certificates, PostgreSQL volume, or Host Agent backups. The same command repairs
-the Host Agent service boundary for v1.1.0 or v1.1.1 installations. Run it once from any
-directory:
+the Host Agent service boundary for v1.1.0 or v1.1.1 installations. A v1.1.2 Host Agent still
+trusts and discovers the legacy Docker namespace, so it also requires this one-time CLI
+migration before future upgrades can run from the UI. Run it once from any directory:
 
 ```bash
 curl -fsSL https://github.com/runovelhq/wolt/releases/download/v1.1.3/install.sh | \
