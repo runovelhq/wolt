@@ -2,6 +2,13 @@
 
 All notable changes follow Keep a Changelog and semantic versioning.
 
+## [1.1.3] - 2026-07-26
+
+### Changed
+
+- Moved the official GitHub release, installer, CI badge, and Cosign signing identity to `runovelhq/wolt`.
+- Moved the default Docker image repository, Host Agent upgrade discovery, and UI Docker Hub links to `runovel/wolt`.
+
 ## [1.1.2] - 2026-07-20
 
 ### Fixed

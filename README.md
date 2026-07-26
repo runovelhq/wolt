@@ -3,17 +3,17 @@
 ## One-line installation
 
 ```bash
-curl -fsSL https://github.com/AlirezaSayyari/WOLT/releases/latest/download/install.sh | sudo bash -s -- --install-dir /data/WOLT
+curl -fsSL https://github.com/runovelhq/wolt/releases/latest/download/install.sh | sudo bash -s -- --install-dir /data/WOLT
 ```
 
 <p align="center">
   <img src="docs/wolt-cover.png" alt="WOLT Wake-on-LAN translation flow" width="1200">
 </p>
 
-[![CI](https://github.com/AlirezaSayyari/WOLT/actions/workflows/ci.yml/badge.svg)](https://github.com/AlirezaSayyari/WOLT/actions/workflows/ci.yml)
-[![Docker](https://img.shields.io/docker/v/alirezasayyari/wolt?sort=semver&label=Docker)](https://hub.docker.com/r/alirezasayyari/wolt)
+[![CI](https://github.com/runovelhq/wolt/actions/workflows/ci.yml/badge.svg)](https://github.com/runovelhq/wolt/actions/workflows/ci.yml)
+[![Docker](https://img.shields.io/docker/v/runovel/wolt?sort=semver&label=Docker)](https://hub.docker.com/r/runovel/wolt)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Architectures](https://img.shields.io/badge/architectures-amd64%20%7C%20arm64-0db7ed.svg)](https://hub.docker.com/r/alirezasayyari/wolt/tags)
+[![Architectures](https://img.shields.io/badge/architectures-amd64%20%7C%20arm64-0db7ed.svg)](https://hub.docker.com/r/runovel/wolt/tags)
 
 Translate standard Wake-on-LAN magic packets from Guacamole or another PAM system into native edge-device wake commands.
 
@@ -24,7 +24,7 @@ clone the repository. Docker Engine, Docker Compose v2, curl, OpenSSL, Python 3,
 `sha256sum` must already be installed; the installer adds a checksum-verified Cosign binary
 when needed.
 
-> Current stable image: `alirezasayyari/wolt:v1.1.2` (also published as `1.1.2`, `1.1`, and `latest`)
+> Current stable image: `runovel/wolt:v1.1.3` (also published as `1.1.3`, `1.1`, and `latest`)
 
 ---
 
@@ -54,7 +54,7 @@ a source checkout, build an image explicitly and then start it:
 
 ```bash
 ./scripts/init-web-env.sh
-docker build --target production --build-arg WOLT_VERSION=v1.1.2-dev -t wolt:local .
+docker build --target production --build-arg WOLT_VERSION=v1.1.3-dev -t wolt:local .
 WOLT_IMAGE=wolt:local docker compose --env-file .env.web -f compose.web.yml up -d --no-build
 ```
 
@@ -79,7 +79,7 @@ the Host Agent service boundary for v1.1.0 or v1.1.1 installations. Run it once 
 directory:
 
 ```bash
-curl -fsSL https://github.com/AlirezaSayyari/WOLT/releases/download/v1.1.2/install.sh | \
+curl -fsSL https://github.com/runovelhq/wolt/releases/download/v1.1.3/install.sh | \
   sudo bash -s -- --install-dir /data/WOLT --upgrade-existing
 ```
 
@@ -311,8 +311,8 @@ Every GitHub release contains the exact installer used for that version and its 
 To review and verify it before execution:
 
 ```bash
-curl -fLO https://github.com/AlirezaSayyari/WOLT/releases/download/v1.1.2/install.sh
-curl -fLO https://github.com/AlirezaSayyari/WOLT/releases/download/v1.1.2/install.sh.sha256
+curl -fLO https://github.com/runovelhq/wolt/releases/download/v1.1.3/install.sh
+curl -fLO https://github.com/runovelhq/wolt/releases/download/v1.1.3/install.sh.sha256
 sha256sum --check install.sh.sha256
 sudo bash install.sh --install-dir /data/WOLT
 ```

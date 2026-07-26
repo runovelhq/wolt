@@ -58,7 +58,7 @@ WOLT_COMPOSE_FILE=$PROJECT_DIR/compose.web.yml
 WOLT_HOST_AGENT_COMPOSE_FILE=$PROJECT_DIR/compose.host-agent.yml
 WOLT_ENV_FILE=$ENV_FILE
 WOLT_RUNTIME_DIR=$PROJECT_DIR/runtime
-WOLT_IMAGE_REPOSITORY=alirezasayyari/wolt
+WOLT_IMAGE_REPOSITORY=runovel/wolt
 WOLT_HEALTH_URL=http://127.0.0.1:$WEB_PORT/api/v1/health/ready
 EOF
 chmod 0600 /etc/wolt-host-agent.env

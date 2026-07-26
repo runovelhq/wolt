@@ -32,7 +32,7 @@ def config(tmp_path: Path, token: str = "a" * 64) -> AgentConfig:
     )
 
 
-def runtime_bundle(root: Path, version: str = "v1.1.2") -> Path:
+def runtime_bundle(root: Path, version: str = "v1.1.3") -> Path:
     root.mkdir()
     (root / "scripts").mkdir()
     (root / "host_agent").mkdir()
@@ -135,9 +135,9 @@ def test_signed_image_is_pinned_to_verified_digest(tmp_path: Path) -> None:
     controller = HostController(agent_config, runner=runner)
     image = controller._verified_image("0.3.0")
 
-    assert image == f"alirezasayyari/wolt@{digest}"
+    assert image == f"runovel/wolt@{digest}"
     assert calls[0][0:3] == [str(cosign), "verify", "--output"]
-    assert calls[0][-1] == "alirezasayyari/wolt:0.3.0"
+    assert calls[0][-1] == "runovel/wolt:0.3.0"
 
 
 def test_signature_command_failure_reports_verification_stage(tmp_path: Path) -> None:
@@ -150,7 +150,7 @@ def test_signature_command_failure_reports_verification_stage(tmp_path: Path) ->
         return subprocess.CompletedProcess(arguments, 1, "", "verification failed")
 
     with pytest.raises(AgentError, match="signature_verification_failed"):
-        HostController(agent_config, runner=runner)._verified_image("v1.1.2")
+        HostController(agent_config, runner=runner)._verified_image("v1.1.3")
 
 
 def test_pre_upgrade_database_backup_is_private_and_allowlisted(tmp_path: Path) -> None:
@@ -192,12 +192,12 @@ def test_runtime_deployment_preserves_user_state_and_can_restore(tmp_path: Path)
     source = runtime_bundle(tmp_path / "bundle")
     controller = HostController(agent_config)
 
-    controller._validate_runtime(source, "v1.1.2")
+    controller._validate_runtime(source, "v1.1.3")
     backup = controller._deploy_runtime(source)
 
     assert (agent_config.project_dir / ".env.web").read_text().startswith("POSTGRES_PASSWORD=do-not-touch")
     assert (certs / "smtp-ca.pem").read_text() == "private ca"
-    assert (agent_config.project_dir / "VERSION").read_text() == "v1.1.2"
+    assert (agent_config.project_dir / "VERSION").read_text() == "v1.1.3"
     assert (agent_config.runtime_dir / "scripts" / "install-host-agent.sh").stat().st_mode & 0o777 == 0o755
     assert (agent_config.agent_install_dir / "server.py").read_text() == "VERSION = 'new'\n"
 
@@ -213,11 +213,11 @@ def test_runtime_validation_rejects_mismatch_and_symlink(tmp_path: Path) -> None
     controller = HostController(config(tmp_path))
     source = runtime_bundle(tmp_path / "bundle", version="v9.9.9")
     with pytest.raises(AgentError, match="runtime_bundle_version_mismatch"):
-        controller._validate_runtime(source, "v1.1.2")
+        controller._validate_runtime(source, "v1.1.3")
     (source / "VERSION").unlink()
     (source / "VERSION").symlink_to(source / "compose.web.yml")
     with pytest.raises(AgentError, match="runtime_bundle_invalid"):
-        controller._validate_runtime(source, "v1.1.2")
+        controller._validate_runtime(source, "v1.1.3")
 
 
 def test_completed_job_survives_agent_restart(tmp_path: Path) -> None:
@@ -262,7 +262,7 @@ def test_upgrade_compose_failure_restores_runtime_environment_and_database(
     agent_config.agent_install_dir.mkdir()
     (agent_config.agent_install_dir / "server.py").write_text("old agent", encoding="utf-8")
     with agent_config.env_file.open("a", encoding="utf-8") as stream:
-        stream.write("WOLT_IMAGE=alirezasayyari/wolt@sha256:" + "a" * 64 + "\n")
+        stream.write("WOLT_IMAGE=runovel/wolt@sha256:" + "a" * 64 + "\n")
         stream.write("WOLT_VERSION=v1.0.1\n")
     controller = HostController(agent_config)
     source = runtime_bundle(tmp_path / "bundle")
@@ -271,7 +271,7 @@ def test_upgrade_compose_failure_restores_runtime_environment_and_database(
     database_backup.write_bytes(b"PGDMP")
     restored_database: list[Path] = []
 
-    controller._verified_image = lambda _version: "alirezasayyari/wolt@sha256:" + "b" * 64  # type: ignore[method-assign]
+    controller._verified_image = lambda _version: "runovel/wolt@sha256:" + "b" * 64  # type: ignore[method-assign]
     controller._extract_runtime = lambda _image, _version: source  # type: ignore[method-assign]
     controller._database_backup = lambda: database_backup  # type: ignore[method-assign]
     controller._database_restore = lambda path: restored_database.append(path)  # type: ignore[method-assign]
@@ -279,7 +279,7 @@ def test_upgrade_compose_failure_restores_runtime_environment_and_database(
     controller._run = lambda _arguments, timeout=120: subprocess.CompletedProcess([], 0, "", "")  # type: ignore[method-assign]
     controller._compose = lambda *_args, **_kwargs: (_ for _ in ()).throw(AgentError("host_command_failed", 502))  # type: ignore[method-assign]
 
-    controller._execute_job("upgrade-job", "upgrade", {"version": "v1.1.2"})
+    controller._execute_job("upgrade-job", "upgrade", {"version": "v1.1.3"})
 
     assert controller.job("upgrade-job")["status"] == "failed"
     assert controller.job("upgrade-job")["error"] == "host_command_failed"
@@ -296,7 +296,7 @@ def test_unix_socket_requires_bearer_token(tmp_path: Path) -> None:
     thread = threading.Thread(target=server.serve_forever, daemon=True)
     thread.start()
     try:
-        assert HostAgentClient(agent_config.socket_path, agent_config.token).request("GET", "/v1/status")["agent_version"] == "1.1.2"
+        assert HostAgentClient(agent_config.socket_path, agent_config.token).request("GET", "/v1/status")["agent_version"] == "1.1.3"
         with pytest.raises(HostAgentError) as error:
             HostAgentClient(agent_config.socket_path, "wrong" * 10).request("GET", "/v1/status")
         assert error.value.status == 401
